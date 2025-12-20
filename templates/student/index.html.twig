@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Domothecaria{% endblock %}
+{% block title %}Gestion des Étudiants{% endblock %}
 
 {% block body %}
 <style>
-
 * {
     margin: 0;
     padding: 0;
@@ -28,7 +27,6 @@ a {
     text-decoration: none;
     color: inherit;
 }
-
 
 .navbar {
     background-color: #343a40;
@@ -187,14 +185,12 @@ table td button:hover {
     font-weight: bold;
 }
 
-
 footer {
     background-color: #343a40;
     color: #fff;
     padding: 1.5rem;
     text-align: center;
 }
-
 
 @media (max-width: 768px) {
     .navbar .nav-links {
@@ -230,11 +226,11 @@ footer {
             <a href="#">Gestion Scolaire</a>
         </div>
         <ul class="nav-links">
-            <li><button class="btn" onclick="navigateTo('/students')"><i class="fas fa-users"></i> Élèves</button></li>
-            <li><button class="btn" onclick="navigateTo('/courses')"><i class="fas fa-chalkboard-teacher"></i> Cours</button></li>
-            <li><button class="btn" onclick="navigateTo('/modules')"><i class="fas fa-cogs"></i> Modules</button></li>
-            <li><button class="btn" onclick="navigateTo('/profile')"><i class="fas fa-user"></i> Profil</button></li>
-            <li><button class="btn" onclick="navigateTo('/logout')"><i class="fas fa-sign-out-alt"></i> Déconnexion</button></li>
+            <li><button class="btn" onclick="navigateTo('students')"><i class="fas fa-users"></i> Élèves</button></li>
+            <li><button class="btn" onclick="navigateTo('courses')"><i class="fas fa-chalkboard-teacher"></i> Cours</button></li>
+            <li><button class="btn" onclick="navigateTo('modules')"><i class="fas fa-cogs"></i> Modules</button></li>
+            <li><button class="btn" onclick="navigateTo('profile')"><i class="fas fa-user"></i> Profil</button></li>
+            <li><button class="btn" onclick="navigateTo('#')"><i class="fas fa-sign-out-alt"></i> Déconnexion</button></li>
         </ul>
     </nav>
 </header>
@@ -242,38 +238,73 @@ footer {
 <main>
     <section class="dashboard-overview">
         <div class="dashboard-card">
-            <h3>Gestion des Systèmes Scolaires</h3>
-            <p>Contrôlez toutes les données scolaires à partir de ce tableau de bord centralisé.</p>
+            <h3>Gestion des Étudiants</h3>
+            <p>Ajoutez, modifiez ou supprimez les étudiants, et attribuez-leur des cours et modules.</p>
         </div>
-
     </section>
 
-    <section class="data-table">
+    <!-- Add/Modify Student Form -->
+    <section class="student-form">
         <div class="table-container">
-            <h4>Liste des Cours</h4>
+            <h4>Ajouter ou Modifier un Élève</h4>
+            <form method="post" style="display:grid;">
+                <label for="student_name">Nom de l'élève:</label>
+                <input type="text" id="student_name" name="student_name" placeholder="Entrez le nom de l'élève" required>
+
+                <label for="student_email">Email:</label>
+                <input type="email" id="student_email" name="student_email" placeholder="Entrez l'email de l'élève" required>
+
+                <label for="student_classes">Classes:</label>
+                <select multiple id="student_classes" name="student_classes[]">
+                    <option value="math">Mathématiques</option>
+                    <option value="science">Sciences</option>
+                    <option value="history">Histoire</option>
+                    <option value="english">Français</option>
+                </select>
+
+                <label for="student_modules">Modules:</label>
+                <select multiple id="student_modules" name="student_modules[]">
+                    <option value="module_1">Module 1</option>
+                    <option value="module_2">Module 2</option>
+                    <option value="module_3">Module 3</option>
+                    <option value="module_4">Module 4</option>
+                </select>
+
+                <button type="submit" class="btn-action"><i class="fas fa-save"></i> Enregistrer l'Élève</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Student List Table -->
+    <section class="student-list">
+        <div class="table-container">
+            <h4>Liste des Étudiants</h4>
             <table>
                 <thead>
                     <tr>
-                        <th>Cours</th>
-                        <th>Module</th>
-                        <th>Professeur</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Classes</th>
+                        <th>Modules</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Mathématiques</td>
-                        <td>Algèbre</td>
-                        <td>Prof. Dupont</td>
+                        <td>John Doe</td>
+                        <td>john.doe@email.com</td>
+                        <td>Mathématiques, Sciences</td>
+                        <td>Module 1, Module 2</td>
                         <td>
                             <button class="btn-edit"><i class="fas fa-edit"></i></button>
                             <button class="btn-delete"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                     <tr>
-                        <td>Français</td>
-                        <td>Grammaire</td>
-                        <td>Prof. Martin</td>
+                        <td>Jane Smith</td>
+                        <td>jane.smith@email.com</td>
+                        <td>Français, Histoire</td>
+                        <td>Module 3, Module 4</td>
                         <td>
                             <button class="btn-edit"><i class="fas fa-edit"></i></button>
                             <button class="btn-delete"><i class="fas fa-trash-alt"></i></button>
@@ -284,6 +315,7 @@ footer {
         </div>
     </section>
 
+    <!-- Statistics Section -->
     <section class="statistics">
         <div class="stat-card">
             <h5>Total d'Élèves</h5>
@@ -305,3 +337,4 @@ footer {
 </footer>
 
 {% endblock %}
+
