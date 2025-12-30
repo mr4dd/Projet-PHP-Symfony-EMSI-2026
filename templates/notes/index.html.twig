@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Notes{% endblock %}
+
+{% block body %}
+
+<script>
+    function navigateTo(url) {
+        window.location.href = url;
+    }
+</script>
+
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="/">Gestion Scolaire</a>
+        </div>
+        <ul class="nav-links">
+            <li><button class="btn" onclick="navigateTo('students')"><i class="fas fa-users"></i> Élèves</button></li>
+            <li><button class="btn" onclick="navigateTo('courses')"><i class="fas fa-chalkboard-teacher"></i> Cours</button></li>
+            <li><button class="btn" onclick="navigateTo('modules')"><i class="fas fa-cogs"></i> Modules</button></li>
+            <li><button class="btn" onclick="navigateTo('/notes')"><i class="fas fa-graduation-cap"></i> Notes</button></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="dashboard-overview">
+        <div class="dashboard-card">
+            <h3>Gestion des Notes</h3>
+            <p>Ajoutez, modifiez ou supprimez les notes des étudiants pour chaque cours.</p>
+        </div>
+    </section>
+
+    
+    <section class="student-form">
+        <div class="table-container">
+            <h4>Ajouter ou Modifier une Note</h4>
+            <form method="post" style="display:grid;">
+                <label for="student_matricule">Matricule de l'élève:</label>
+                <select id="student_matricule" name="matricule" required>
+                {% for student in students %}
+                    <option value={{student.matricule}}>{{student.nom}}</option>
+                {% endfor %}
+                </select>
+
+                <label for="course_name">Nom du cours:</label>
+                <select id="course_name" name="cours" required>
+                {% for course in courses %}
+                    <option value={{course.id}}>{{course.nom}}</option>
+                {% endfor %}
+                </select>
+                <label for="grade">Note:</label>
+                <input type="number" id="grade" name="grade" placeholder="Entrez la note" min="0" max="100" required>
+
+                <button type="submit" class="btn-action"><i class="fas fa-save"></i> Enregistrer la Note</button>
+            </form>
+        </div>
+    </section>
+
+    
+    <section class="student-list">
+        <div class="table-container">
+            <h4>Liste des Notes</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Matricule</th>
+                        <th>Cours</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grade in grades %}
+                    <tr>
+                        <td>{{ studentMap[grade.id].matricule }}</td>
+                        <td>{{ courseMap[grade.id].nom }}</td>
+                        <td>{{ grade.note }}</td>
+                        <td>
+                            <button class="btn-edit" onclick="edit()"><i class="fas fa-edit"></i></button>
+                            <button class="btn-delete" onclick="delete()"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Système de Gestion Scolaire | Tous droits réservés</p>
+</footer>
+
+{% endblock %}
