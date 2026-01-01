@@ -42,7 +42,7 @@
             
             <label for="description">Description</label>
             <input type="text" id="description" name="description" placeholder="c'est un course d'algebre niveau post baccalaureat">
-
+            <input type="text" id="id" name="id" hidden>
             <button type="submit" class="btn-action">Enregistrer le Cours</button>
         </form>
     </section>
@@ -63,10 +63,13 @@
                     <td>{{course.nom}}</td>
                     <td>{{moduleMap[course.getModuleId().id].nom}}</td>
                     <td>
-                        <form method="POST">
-                                <input hidden name="id" value={{course.id}}>
-                                <button class="btn-edit" name="action" value="edit"><i class="fas fa-edit"></i></button>
-                        </form>
+                        
+                        <button class="btn-edit" 
+                                onclick="editMode(this)"
+                                data-id="{{ course.id }}"
+                                data-nom="{{ course.nom }}"
+                                data-description="{{ course.description }}"
+                                data-module="{{moduleMap[course.getModuleId().id].id}}"><i class="fas fa-edit"></i></button>
                         <form method="POST">
                             <input hidden name="id" value={{course.id}}>
                             <button class="btn-delete" name="action" value="delete"><i class="fas fa-trash-alt"></i></button>
@@ -87,6 +90,18 @@
     function navigateTo(path) {
         window.location.href = path;
     }
+    function editMode(button) {
+    document.getElementById('id').value = button.dataset.id;
+    document.getElementById('course-name').value = button.dataset.nom;
+    document.getElementById('module-name').value = button.dataset.module;
+    document.getElementById('description').value = button.dataset.description;
+
+    const submitBtn = document.querySelector('.btn-action');
+    submitBtn.value = 'edit';
+    submitBtn.textContent = 'Mettre à jour le cours';
+    submitBtn.name = "action";
+    }
+
 </script>
 
 {% endblock %}

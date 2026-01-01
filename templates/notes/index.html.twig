@@ -8,6 +8,17 @@
     function navigateTo(url) {
         window.location.href = url;
     }
+    function editMode(button) {
+    document.getElementById('id').value = button.dataset.id;
+    document.getElementById('student_id').value = button.dataset.student;
+    document.getElementById('course_id').value = button.dataset.course;
+    document.getElementById('grade').value = button.dataset.grade;
+
+    const submitBtn = document.querySelector('.btn-action');
+    submitBtn.value = 'edit';
+    submitBtn.textContent = 'Mettre à jour la note';
+    submitBtn.name = "action";
+    }
 </script>
 
 <header>
@@ -38,21 +49,21 @@
             <h4>Ajouter ou Modifier une Note</h4>
             <form method="post" style="display:grid;">
                 <label for="student_matricule">Matricule de l'élève:</label>
-                <select id="student_matricule" name="matricule" required>
+                <select id="student_id" name="etud_id" required>
                 {% for student in students %}
-                    <option value={{student.matricule}}>{{student.nom}}</option>
+                    <option value={{student.id}}>{{student.nom}} {{student.prenom}}</option>
                 {% endfor %}
                 </select>
 
                 <label for="course_name">Nom du cours:</label>
-                <select id="course_name" name="cours" required>
+                <select id="course_id" name="cours" required>
                 {% for course in courses %}
                     <option value={{course.id}}>{{course.nom}}</option>
                 {% endfor %}
                 </select>
                 <label for="grade">Note:</label>
                 <input type="number" id="grade" name="grade" placeholder="Entrez la note" min="0" max="100" required>
-
+                <input type="text" id="id" name="id" hidden>
                 <button type="submit" class="btn-action"><i class="fas fa-save"></i> Enregistrer la Note</button>
             </form>
         </div>
@@ -74,13 +85,21 @@
                 <tbody>
                     {% for grade in grades %}
                     <tr>
-                        <td>{{ studentMap[grade.id].matricule }}</td>
+                        <td>{{ studentMap[grade.id].nom }} {{studentMap[grade.id].prenom}}</td>
                         <td>{{ courseMap[grade.id].nom }}</td>
                         <td>{{ grade.note }}</td>
                         <td>
-                            <button class="btn-edit" onclick="edit()"><i class="fas fa-edit"></i></button>
-                            <button class="btn-delete" onclick="delete()"><i class="fas fa-trash-alt"></i></button>
-                        </td>
+                            <button class="btn-edit"
+                            onclick="editMode(this)"
+                            data-student="{{ studentMap[grade.id].id }}"
+                            data-course="{{ courseMap[grade.id].id }}"
+                            data-grade="{{ grade.note }}"
+                            data-id="{{ grade.id }}"><i class="fas fa-edit"></i></button>
+                            <form method="POST">
+                                <input hidden name="id" value={{grade.id}}>
+                                <button class="btn-delete" name="action" value="delete"><i class="fas fa-trash-alt"></i></button>
+                            </form>                        
+                            </td>
                     </tr>
                     {% endfor %}
                 </tbody>

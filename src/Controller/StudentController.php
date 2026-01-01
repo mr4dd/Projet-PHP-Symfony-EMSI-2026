@@ -8,7 +8,6 @@ use App\Repository\ModuleRepository;
 use App\Entity\Student;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -29,7 +28,15 @@ final class StudentController extends AbstractController
             $id = $_POST["id"] ?? null;
 
             if ($nom && $matricule && $prenom) {
-                if (count($studentRepository->findBy(["nom" => $nom])) == 0) {
+                if ($action && $action == "edit" && $id) {
+                    $student = $studentRepository->find($id);
+                    if ($student) {
+                        $student->setNom($nom);
+                        $student->setPrenom($prenom);
+                        $student->setMatricule($matricule);
+                        $em->flush();
+                    }
+                } else if (count($studentRepository->findBy(["nom" => $nom])) == 0) {
                     $student = new Student();
                     $student->setNom($nom);
                     $student->setPrenom($prenom);
@@ -38,9 +45,11 @@ final class StudentController extends AbstractController
                     $em->flush();
                 }
             } else if ($action && $id) {
-                $student = $studentRepository->find($id);
-                $em->remove($student);
-                $em->flush();
+                if ($action == "delete") {
+                    $student = $studentRepository->find($id);
+                    $em->remove($student);
+                    $em->flush();
+                }
             }
 
             return $this->redirectToRoute('app_student');

@@ -8,6 +8,17 @@
     function navigateTo(url) {
         window.location.href = url;
     }
+    function editMode(button) {
+    document.getElementById('id').value = button.dataset.id;
+    document.getElementById('student_name').value = button.dataset.nom;
+    document.getElementById('student_first').value = button.dataset.prenom;
+    document.getElementById('matricule').value = button.dataset.matricule;
+
+    const submitBtn = document.querySelector('.btn-action');
+    submitBtn.value = 'edit';
+    submitBtn.textContent = 'Mettre à jour l\'etudiant';
+    submitBtn.name = "action";
+    }
 </script>
 
 <header>
@@ -32,7 +43,6 @@
         </div>
     </section>
 
-    <!-- Add/Modify Student Form -->
     <section class="student-form">
         <div class="table-container">
             <h4>Ajouter ou Modifier un Élève</h4>
@@ -40,17 +50,16 @@
                 <label for="student_name">Nom de l'élève:</label>
                 <input type="text" id="student_name" name="nom" placeholder="Entrez le nom de l'élève" required>
                 <label for="student_name">Prenom de l'eleve:</label>
-                <input type="text" id="student_name" name="prenom" placeholder="Entrez le nom de l'élève" required>
+                <input type="text" id="student_first" name="prenom" placeholder="Entrez le nom de l'élève" required>
 
-                <label for="student_email">Matricule:</label>
-                <input type="text" id="student_email" name="matricule" placeholder="Entrez le matricule de l'élève" required>
-
+                <label for="matricule">Matricule:</label>
+                <input type="text" id="matricule" name="matricule" placeholder="Entrez le matricule de l'élève" required>
+                <input type="text" id="id" name="id" hidden>
                 <button type="submit" class="btn-action"><i class="fas fa-save"></i> Enregistrer l'Élève</button>
             </form>
         </div>
     </section>
 
-    <!-- Student List Table -->
     <section class="student-list">
         <div class="table-container">
             <h4>Liste des Étudiants</h4>
@@ -70,13 +79,19 @@
                         <td>{{student.prenom}}</td>
                         <td>{{student.matricule}}</td>
                         <td>
-                            <form method="POST">
-                                <input hidden name="id" value={{student.id}}>
-                                <button class="btn-edit" name="action" value="edit"><i class="fas fa-edit"></i></button>
-                            </form>
+                            <button class="btn-edit"
+                            onclick="editMode(this)"
+                            data-id="{{ student.id }}"
+                            data-nom="{{ student.nom }}"
+                            data-prenom="{{ student.prenom }}"
+                            data-matricule="{{ student.matricule }}"><i class="fas fa-edit"></i></button>
                             <form method="POST">
                                 <input hidden name="id" value={{student.id}}>
                                 <button class="btn-delete" name="action" value="delete"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                            <form method="POST" action="/bulletin">
+                                <input hidden name="id" value={{student.id}}>
+                                <button class="btn-bulletin"><i class="fa-solid fa-file-lines"></i></button>
                             </form>
                         </td>
                     </tr>
@@ -86,7 +101,6 @@
         </div>
     </section>
 
-    <!-- Statistics Section -->
     <section class="statistics">
         <div class="stat-card">
             <h5>Total d'Élèves</h5>

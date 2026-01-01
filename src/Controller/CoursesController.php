@@ -27,7 +27,15 @@ final class CoursesController extends AbstractController
             $courses = $courseRepository->findBy(["nom" => $courseName]);
 
             if ($courseName && $moduleId && $desc) {
-                if (count($courses) == 0) {
+                if ($action && $action == "edit" && $id) {
+                    $course = $courseRepository->find($id);
+                    if ($course) {
+                        $course->setNom($courseName);
+                        $course->setModuleId($moduleRepository->find($moduleId));
+                        $course->setDescription($desc);
+                        $em->flush();
+                    }
+                } else if (count($courses) == 0) {
                     $course = new Course();
                     $course->setNom($courseName);
                     $course->setModuleId($moduleRepository->find($moduleId));
@@ -36,9 +44,11 @@ final class CoursesController extends AbstractController
                     $em->flush();
                 }
             } else if ($action && $id) {
-                $course = $courseRepository->find($id);
-                $em->remove($course);
-                $em->flush();
+                if ($action == "delete") {
+                    $course = $courseRepository->find($id);
+                    $em->remove($course);
+                    $em->flush();
+                }
             }
             return $this->redirectToRoute('app_courses');
         }

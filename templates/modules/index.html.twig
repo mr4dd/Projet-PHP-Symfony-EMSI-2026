@@ -36,7 +36,7 @@
 
             <label for="module-description">Description</label>
             <input type="text" id="module-description" name="description" placeholder="Ex. Cours avancé en Mathématiques" required>
-
+            <input type="text" id="id" name="id" hidden>
             <button type="submit" class='btn-action'>Enregistrer le Module</button>
         </form>
     </section>
@@ -57,10 +57,12 @@
                     <td>{{module.nom}}</td>
                     <td>{{module.description}}</td>
                     <td>
-                        <form method="POST">
-                                <input hidden name="id" value={{module.id}}>
-                                <button class="btn-edit" name="action" value="edit"><i class="fas fa-edit"></i></button>
-                        </form>
+                        <button class="btn-edit"
+                        onclick="editMode(this)"
+                        data-id="{{ module.id }}"
+                        data-nom="{{ module.nom }}"
+                        data-description="{{ module.description }}"
+                        ><i class="fas fa-edit"></i></button>
                         <form method="POST">
                             <input hidden name="id" value={{module.id}}>
                             <button class="btn-delete" name="action" value="delete"><i class="fas fa-trash-alt"></i></button>
@@ -80,6 +82,16 @@
 <script>
     function navigateTo(path) {
         window.location.href = path;
+    }
+    function editMode(button) {
+    document.getElementById('id').value = button.dataset.id;
+    document.getElementById('module-name').value = button.dataset.nom;
+    document.getElementById('module-description').value = button.dataset.description;
+
+    const submitBtn = document.querySelector('.btn-action');
+    submitBtn.value = 'edit';
+    submitBtn.textContent = 'Mettre à jour le module';
+    submitBtn.name = "action";
     }
 </script>
 

@@ -24,7 +24,14 @@ final class ModulesController extends AbstractController
             $id = $_POST["id"] ?? null;
 
             if ($moduleName && $moduleDescription) {
-                if (count($modules) == 0) {
+                if ($action && $action == "edit" && $id) {
+                    $module = $moduleRepository->find($id);
+                    if ($module) {
+                        $module->setNom($moduleName);
+                        $module->setDescription($moduleDescription);
+                        $em->flush();
+                    }
+                } else if (count($modules) == 0) {
                     $module = new Module();
                     $module->setNom($moduleName);
                     $module->setDescription($moduleDescription);
@@ -33,9 +40,11 @@ final class ModulesController extends AbstractController
                     $em->flush();
                 }
             } else if ($action && $id) {
-                $module = $moduleRepository->find($id);
-                $em->remove($module);
-                $em->flush();
+                if ($action == "delete") {
+                    $module = $moduleRepository->find($id);
+                    $em->remove($module);
+                    $em->flush();
+                }
             }
 
             return $this->redirectToRoute('app_modules');
