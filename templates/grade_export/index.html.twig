@@ -35,7 +35,9 @@
                 </tr>
             </thead>
             <tbody>
+            {% set moyenne = 0 %}
                 {% for note in grades %}
+                {% set moyenne = moyenne + note.note %}
                     <tr>
                         <td style="
                             border: 1px solid #000;
@@ -51,6 +53,22 @@
                         </td>
                     </tr>
                 {% endfor %}
+                <tr>
+                        <td style="
+                            border: 1px solid #000;
+                            padding: 8px;
+                            background-color: lightgray;
+                        ">
+                            Moyenne
+                        </td>
+                        <td style="
+                            border: 1px solid #000;
+                            padding: 8px;
+                            background-color: lightgray;
+                        ">
+                            {{(moyenne / grades|length )}}
+                        </td>
+                    </tr>
             </tbody>
         </table>        
         <div style="
