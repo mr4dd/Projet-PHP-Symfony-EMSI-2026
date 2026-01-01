@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}{% block title %}Bulletin{% endblock %}{% block body %}
+    <div style="
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    ">        
+        <div style="margin-top: 40px; margin-bottom: 30px;">
+            <h1 style="margin: 0;">Bulletin</h1>
+            <p style="margin: 5px 0;"><strong>{{ student.nom }} {{student.prenom}}</strong></p>
+            <p style="margin: 5px 0;">Date : {{ "now"|date("Y-m-d") }}</p>
+        </div>        
+        <table style="
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        ">
+            <thead>
+                <tr>
+                    <th style="
+                        border: 1px solid #000;
+                        padding: 10px;
+                        background-color: #eaeaea;
+                    ">
+                        Nom du cours
+                    </th>
+                    <th style="
+                        border: 1px solid #000;
+                        padding: 10px;
+                        background-color: #eaeaea;
+                    ">
+                        Note
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for note in grades %}
+                    <tr>
+                        <td style="
+                            border: 1px solid #000;
+                            padding: 8px;
+                        ">
+                            {{ courses[note.id].nom }}
+                        </td>
+                        <td style="
+                            border: 1px solid #000;
+                            padding: 8px;
+                        ">
+                            {{ note.note }}/20
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+        <div style="
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+        ">
+            <p style="margin: 0;">Généré par le système</p>
+        </div>    </div>
+{% endblock %}
